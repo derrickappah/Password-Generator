@@ -1,0 +1,89 @@
+/* Sets the default font for the entire app */
+body {
+    font-family: 'Manrope', 'Noto Sans', sans-serif;
+}
+
+/* Password Strength Bar Colors */
+.strength-very-weak { background: linear-gradient(90deg, #ef4444 0%, #ef4444 100%); }
+.strength-weak { background: linear-gradient(90deg, #f97316 0%, #f97316 100%); }
+.strength-fair { background: linear-gradient(90deg, #eab308 0%, #eab308 100%); }
+.strength-good { background: linear-gradient(90deg, #22c55e 0%, #22c55e 100%); }
+.strength-strong { background: linear-gradient(90deg, #16a34a 0%, #059669 100%); }
+
+/* Toast Notification Styles */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #22c55e;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    transform: translateX(400px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+}
+.toast.show { transform: translateX(0); }
+.toast.error { background: #ef4444; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3); }
+
+/* Generate Button Hover Effect */
+.generate-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(13, 128, 242, 0.3);
+}
+
+/* Settings/Options Card Hover Effect */
+.option-card:hover {
+    border-color: #0d80f2;
+    transform: translateY(-1px);
+}
+.option-card {
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+/* Shimmer Animation for Strength Indicator */
+.strength-indicator {
+    position: relative;
+    overflow: hidden;
+}
+.strength-indicator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Tab Navigation Styles */
+.nav-tab {
+    color: #60758a;
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+.nav-tab:hover {
+    color: #111418;
+    transform: translateY(-2px);
+}
+.nav-tab.active {
+    color: #0d80f2;
+}
+.nav-tab.active .icon-wrapper {
+    background-color: #e6f0fa;
+}
+
+/* Tab Panel Fade-in Animation */
+.tab-panel {
+    animation: fadeIn 0.4s ease-in-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
