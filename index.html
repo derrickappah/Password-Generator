@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link
+        rel="stylesheet"
+        as="style"
+        onload="this.rel='stylesheet'"
+        href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    >
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,">
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50">
+    <div class="flex flex-col min-h-screen">
+        <header class="sticky top-0 bg-white/80 backdrop-blur-sm p-4 pb-2 shadow-sm z-10">
+            <h1 class="text-[#111418] text-xl font-bold leading-tight tracking-[-0.015em] text-center">🔐 Password Generator</h1>
+        </header>
+
+        <main class="flex-1 pb-24">
+            <div id="generate-panel" class="tab-panel">
+                 <div class="px-4 py-4">
+                    <div class="max-w-[480px] mx-auto bg-white rounded-xl p-4 shadow-lg option-card">
+                        <label class="flex flex-col">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[#111418] text-sm font-semibold">Password Length</span>
+                                <span id="lengthValue" class="bg-[#0d80f2] text-white px-3 py-1 rounded-full text-sm font-bold">12</span>
+                            </div>
+                            <input type="range" id="lengthSlider" min="4" max="64" value="12" class="w-full h-3 bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg appearance-none cursor-pointer slider">
+                            <div class="flex justify-between text-xs text-[#60758a] mt-2">
+                                <span>Weak (4)</span>
+                                <span>Strong (64)</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3 mx-auto">
+                    <div class="flex flex-col min-w-40 flex-1">
+                        <div class="flex w-full flex-1 items-stretch rounded-xl shadow-lg overflow-hidden">
+                            <input
+                                id="passwordInput"
+                                type="password"
+                                readonly
+                                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-[#111418] focus:outline-0 focus:ring-0 border-0 bg-white h-16 placeholder:text-[#60758a] p-4 text-lg font-mono leading-normal cursor-pointer select-all"
+                                placeholder="Your password will appear here..."
+                            >
+                            <button
+                                id="toggleVisibility"
+                                class="text-[#60758a] flex bg-white items-center justify-center px-4 hover:bg-[#f8f9fa] transition-colors cursor-pointer group"
+                                title="Toggle password visibility"
+                            >
+                                <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256" class="group-hover:text-[#0d80f2] transition-colors">
+                                    <path d="M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,192c-30.78,0-57.67-11.19-79.93-33.25A133.47,133.47,0,0,1,25,128,133.33,133.33,0,0,1,48.07,97.25C70.33,75.19,97.22,64,128,64s57.67,11.19,79.93,33.25A133.46,133.46,0,0,1,231.05,128C223.84,141.46,192.43,192,128,192Zm0-112a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-4 py-2 max-w-[480px] mx-auto">
+                    <div class="bg-white rounded-xl p-4 shadow-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[#60758a] text-sm font-semibold">Password Strength</span>
+                            <span id="strengthText" class="text-sm font-bold text-[#60758a]">Generate a password</span>
+                        </div>
+                        <div class="relative bg-[#f0f2f5] rounded-full h-3 overflow-hidden strength-indicator">
+                            <div id="strengthBar" class="h-3 rounded-full transition-all duration-500 w-0"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex px-4 py-4 justify-center items-center space-x-4 max-w-[480px] mx-auto">
+                    <button
+                        id="copyBtn"
+                        class="flex flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-white text-[#111418] text-base font-bold hover:bg-[#f8f9fa] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg border-2 border-transparent hover:border-[#0d80f2] group"
+                        disabled
+                    >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2 group-hover:text-[#0d80f2] transition-colors">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM15 5L20 10V21C20 22.1 19.1 23 18 23H8C6.9 23 6 22.1 6 21V7C6 5.9 6.9 5 8 5H15ZM15 6H8V21H18V10H15V6Z" fill="currentColor"/>
+                        </svg>
+                        <span class="truncate">Copy</span>
+                    </button>
+                    <button
+                        id="generateBtn"
+                        class="generate-btn flex flex-1 min-w-[180px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-8 bg-gradient-to-r from-[#0d80f2] to-[#0b6bc7] text-white text-lg font-bold transition-all duration-200 shadow-lg relative"
+                    >
+                        <div id="generateBtnContent" class="flex items-center space-x-2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                            </svg>
+                            <span class="truncate">Generate</span>
+                        </div>
+                        <div id="loadingSpinner" class="hidden">
+                            <div class="animate-spin rounded-full h-6 w-6 border-2 border-white border-t-transparent"></div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="history-panel" class="tab-panel hidden">
+                <div class="px-4 py-4 max-w-[480px] mx-auto">
+                    <div class="bg-white rounded-xl p-6 shadow-lg">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-[#111418] font-bold text-lg">Password History</h3>
+                            <button id="clearHistoryBtn" class="text-[#ef4444] hover:bg-[#fef2f2] px-3 py-1 rounded-lg text-sm font-semibold transition-colors">
+                                Clear All
+                            </button>
+                        </div>
+                        <div id="historyList" class="space-y-3 max-h-96 overflow-y-auto">
+                            <p class="text-[#60758a] text-sm text-center py-8">No passwords generated yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="settings-panel" class="tab-panel hidden">
+                <div class="px-4 py-4 max-w-[480px] mx-auto">
+                    <div class="bg-white rounded-xl p-6 shadow-lg mb-4">
+                        <h3 class="text-[#111418] font-bold text-lg mb-4">Character Options</h3>
+                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label class="flex items-center space-x-3 cursor-pointer p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition">
+                                <input type="checkbox" id="uppercase" checked class="w-5 h-5 text-[#0d80f2] bg-white border-2 border-[#dbe0e6] rounded-lg focus:ring-[#0d80f2] focus:ring-2">
+                                <div><span class="text-[#111418] text-sm font-semibold">Uppercase (A-Z)</span></div>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition">
+                                <input type="checkbox" id="lowercase" checked class="w-5 h-5 text-[#0d80f2] bg-white border-2 border-[#dbe0e6] rounded-lg focus:ring-[#0d80f2] focus:ring-2">
+                                <div><span class="text-[#111418] text-sm font-semibold">Lowercase (a-z)</span></div>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition">
+                                <input type="checkbox" id="numbers" checked class="w-5 h-5 text-[#0d80f2] bg-white border-2 border-[#dbe0e6] rounded-lg focus:ring-[#0d80f2] focus:ring-2">
+                                <div><span class="text-[#111418] text-sm font-semibold">Numbers (0-9)</span></div>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition">
+                                <input type="checkbox" id="symbols" class="w-5 h-5 text-[#0d80f2] bg-white border-2 border-[#dbe0e6] rounded-lg focus:ring-[#0d80f2] focus:ring-2">
+                                <div><span class="text-[#111418] text-sm font-semibold">Symbols (!@#$)</span></div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-lg mb-4">
+                        <h3 class="text-[#111418] font-bold text-lg mb-4">Advanced</h3>
+                        <label class="flex items-center space-x-3 cursor-pointer p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition">
+                            <input type="checkbox" id="excludeSimilar" class="w-5 h-5 text-[#0d80f2] bg-white border-2 border-[#dbe0e6] rounded-lg focus:ring-[#0d80f2] focus:ring-2">
+                            <div>
+                                <span class="text-[#111418] text-sm font-semibold">Exclude Similar Characters</span>
+                                <p class="text-xs text-[#60758a]">Avoid 0, O, l, I, 1</p>
+                            </div>
+                        </label>
+                    </div>
+                     <div class="bg-white rounded-xl p-6 shadow-lg">
+                        <h3 class="text-[#111418] font-bold text-lg mb-4">Preferences</h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center justify-between cursor-pointer">
+                                <span class="text-[#111418] font-semibold">Auto-copy on generate</span>
+                                <input type="checkbox" id="autoCopy" class="w-5 h-5 text-[#0d80f2] bg-white border-2 border-[#dbe0e6] rounded focus:ring-[#0d80f2]">
+                            </label>
+                             <label class="flex items-center justify-between cursor-pointer">
+                                <span class="text-[#111418] font-semibold">Show password briefly</span>
+                                <input type="checkbox" id="autoReveal" checked class="w-5 h-5 text-[#0d80f2] bg-white border-2 border-[#dbe0e6] rounded focus:ring-[#0d80f2]">
+                            </label>
+                            <div>
+                                <label class="block text-[#111418] font-semibold mb-2">
+                                    History limit: <span id="historyLimitValue">10</span>
+                                </label>
+                                <input type="range" id="historyLimit" min="5" max="50" value="10" class="w-full h-2 bg-[#f0f2f5] rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        
+        <nav class="fixed bottom-0 left-0 right-0 h-20 bg-white/90 backdrop-blur-md shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)] z-10">
+            <div id="nav-container" class="max-w-[480px] mx-auto flex justify-around items-center h-full">
+                <button data-tab="generate" class="nav-tab flex flex-col items-center justify-center space-y-1">
+                    <div class="icon-wrapper p-2 rounded-full transition-colors">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M19.5 9.5c-2.43 0-4.43 1.83-4.91 4.14C14.1 13.84 13.56 14 13 14c-2.76 0-5-2.24-5-5s2.24-5 5-5c1.38 0 2.64.56 3.54 1.46L18 4h3v3l-1.42-1.42C18.43 4.42 15.86 3 13 3c-3.86 0-7 3.14-7 7s3.14 7 7 7c.78 0 1.53-.13 2.22-.37C15.68 18.45 17.43 20 19.5 20c2.49 0 4.5-2.01 4.5-4.5S21.99 11 19.5 11v-1.5c0-1.66-1.34-3-3-3h-1.5v1.5h1.5c.83 0 1.5.67 1.5 1.5V11h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-semibold">Generate</span>
+                </button>
+                <button data-tab="history" class="nav-tab flex flex-col items-center justify-center space-y-1">
+                     <div class="icon-wrapper p-2 rounded-full transition-colors">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7h-1v2h1c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-semibold">History (<span id="historyCount">0</span>)</span>
+                </button>
+                <button data-tab="settings" class="nav-tab flex flex-col items-center justify-center space-y-1">
+                     <div class="icon-wrapper p-2 rounded-full transition-colors">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61.22l2-3.46c.12-.22.07.49-.12.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-semibold">Settings</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+    
+    <div id="toast" class="toast">Password copied to clipboard!</div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
